@@ -1,968 +1,1360 @@
-openapi: 3.0.1
-info:
-  title: Partner Customer Profile Onboarding APIs
-  description: API for managing customer partner profile onboarding
-  version: '1.7'
-servers:
-  - url: https://api.rakbankt.ae/customer-onboarding
-    description: TEST URL
-paths:
-  /api/v1/customer-profiles:
-    post:
-      tags:
-        - customer-profile
-      summary: Create a new Customer Profile
-      description: Create a Customer Profile
-      operationId: createCustomerProfile
-      parameters:
-        - name: msgId
-          in: header
-          description: Unique ID for each request
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: Unique ID for each request
-            example: 1234567890
-          example: 1234567890
-        - name: X-Idempotency-Key
-          in: header
-          description: Unique ID for request
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: Unique ID for request
-            example: 1234567890
-          example: 1234567890
-        - name: X-IBM-Client-Id
-          in: header
-          description: X-IBM-Client-Id represents partner name or code
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: X-IBM-Client-Id represents partner name or code
-            example: partner-code
-          example: partner-code
-        - name: Accept
-          in: header
-          description: Accept header for content negotiation
-          required: true
-          schema:
-            type: string
-          example: application/json
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerProfileCreateRequest'
-        required: true
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerProfileResponse'
-        '400':
-          description: Bad Request
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '401':
-          description: Unauthorized
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '403':
-          description: Forbidden
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '500':
-          description: Internal Server Error
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-  /api/v1/customer-profiles/{emiratesId}:
-    get:
-      tags:
-        - customer-profile
-      summary: Retrieve a specific Customer Profile
-      description: Retrieve a Customer Profile
-      operationId: getCustomerProfile
-      parameters:
-        - name: msgId
-          in: header
-          description: Unique ID for each request
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: Unique ID for each request
-            example: 1234567890
-          example: 1234567890
-        - name: X-IBM-Client-Id
-          in: header
-          description: X-IBM-Client-Id represents partner name or code
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: X-IBM-Client-Id represents partner name or code
-            example: partner-code
-          example: partner-code
-        - name: emiratesId
-          in: path
-          description: Emirates ID Card Number
-          required: true
-          schema:
-            maxLength: 100
-            minLength: 15
-            pattern: ^784[0-9]{12}$
-            type: string
-            description: Emirates ID Card Number
-        - name: Accept
-          in: header
-          description: Accept header for content negotiation
-          required: true
-          schema:
-            type: string
-          example: application/json
-      responses:
-        '200':
-          description: OK
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerProfileResponse'
-        '401':
-          description: Unauthorized
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '403':
-          description: Forbidden
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '404':
-          description: Not Found
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '500':
-          description: Internal Server Error
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-    delete:
-      tags:
-        - customer-profile
-      summary: Delete a specific Customer Profile
-      description: Delete a Customer Profile
-      operationId: deleteCustomerProfile
-      parameters:
-        - name: msgId
-          in: header
-          description: Unique ID for each request
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: Unique ID for each request
-            example: 1234567890
-          example: 1234567890
-        - name: X-IBM-Client-Id
-          in: header
-          description: X-IBM-Client-Id represents partner name or code
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: X-IBM-Client-Id represents partner name or code
-            example: partner-code
-          example: partner-code
-        - name: emiratesId
-          in: path
-          description: Emirates ID Card Number
-          required: true
-          schema:
-            maxLength: 100
-            minLength: 15
-            pattern: ^784[0-9]{12}$
-            type: string
-            description: Emirates ID Card Number
-        - name: Accept
-          in: header
-          description: Accept header for content negotiation
-          required: true
-          schema:
-            type: string
-          example: application/json
-      responses:
-        '204':
-          description: No Content
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-        '401':
-          description: Unauthorized
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '403':
-          description: Forbidden
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '404':
-          description: Not Found
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '500':
-          description: Internal Server Error
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-    patch:
-      tags:
-        - customer-profile
-      summary: Update specific attributes within a Customer Profile
-      description: Update a Customer Profile
-      operationId: updateCustomerProfile
-      parameters:
-        - name: msgId
-          in: header
-          description: Unique ID for each request
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: Unique ID for each request
-            example: 1234567890
-          example: 1234567890
-        - name: X-IBM-Client-Id
-          in: header
-          description: X-IBM-Client-Id represents partner name or code
-          required: true
-          schema:
-            maxLength: 100
-            type: string
-            description: X-IBM-Client-Id represents partner name or code
-            example: partner-code
-          example: partner-code
-        - name: emiratesId
-          in: path
-          description: Emirates ID Card Number
-          required: true
-          schema:
-            maxLength: 100
-            minLength: 15
-            pattern: ^784[0-9]{12}$
-            type: string
-            description: Emirates ID Card Number
-        - name: Accept
-          in: header
-          description: Accept header for content negotiation
-          required: true
-          schema:
-            type: string
-          example: application/json
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerProfileUpdateRequest'
-        required: true
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerProfileUpdateResponse'
-        '400':
-          description: Bad Request
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '401':
-          description: Unauthorized
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '403':
-          description: Forbidden
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '404':
-          description: Not Found
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-        '500':
-          description: Internal Server Error
-          headers:
-            msgId:
-              description: Request unique id in response header
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/APIErrorResponse'
-components:
-  schemas:
-    ContactDetails:
-      required:
-        - mobile
-      type: object
-      properties:
-        mobile:
-          maxLength: 100
-          minLength: 9
-          type: string
-          description: Mobile
-        email_id:
-          maxLength: 100
-          type: string
-          description: Email ID
-      description: Contact details of the customer
-    CustomerDetails:
-      required:
-        - contact_details
-        - employment_details
-        - identification_details
-        - kyc_information
-        - personal_details
-      type: object
-      properties:
-        personal_details:
-          $ref: '#/components/schemas/PersonalDetails'
-        identification_details:
-          $ref: '#/components/schemas/IdentificationDetails'
-        employment_details:
-          $ref: '#/components/schemas/EmploymentDetails'
-        contact_details:
-          $ref: '#/components/schemas/ContactDetails'
-        kyc_information:
-          $ref: '#/components/schemas/KycInformation'
-      description: Customer details for profile creation
-    CustomerProfileCreateRequest:
-      required:
-        - customer
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerDetails'
-    EmploymentDetails:
-      type: object
-      properties:
-        employer_or_business_name:
-          maxLength: 255
-          type: string
-          description: 'Employer/Business Name: This field is conditionally mandatory. Either Employer/Business Name or Sponsor Name must be provided'
-        sponsor_name:
-          maxLength: 100
-          type: string
-          description: 'Sponsor Name: This field is conditionally mandatory. Either Employer/Business Name or Sponsor Name must be provided'
-        occupation:
-          maxLength: 50
-          type: string
-          description: Occupation
-      description: Employment details of the customer
-    IdentificationDetails:
-      required:
-        - emirates_id
-        - emirates_id_back_image_url
-        - emirates_id_expiry_date
-        - emirates_id_front_image_url
-        - resident_country
-      type: object
-      properties:
-        passport_number:
-          maxLength: 100
-          type: string
-          description: Passport Number
-        passport_issue_date:
-          maxLength: 50
-          type: string
-          description: Passport Issue Date (yyyy-mm-dd)
-          format: date
-          example: '2025-04-22'
-        passport_expiry_date:
-          maxLength: 50
-          type: string
-          description: Passport Expiry Date
-          format: date
-          example: '2025-04-22'
-        emirates_id:
-          maxLength: 100
-          minLength: 15
-          pattern: ^784[0-9]{12}$
-          type: string
-          description: Emirates ID Card Number
-        emirates_id_expiry_date:
-          type: string
-          description: Emirates ID Expiry Date
-          format: date
-          example: '2025-04-25'
-        emirates_id_ping_status:
-          maxLength: 100
-          type: string
-          description: EmiratesID Ping Status
-        emirates_id_ping_date:
-          maxLength: 50
-          type: string
-          description: EmiratesID Ping Date
-          format: date-time
-          example: '2025-03-18T08:32:44.845Z'
-        resident_country:
-          maxLength: 100
-          type: string
-          description: Resident Country
-          example: UAE
-          enum:
-            - UAE
-        emirates_id_front_image_url:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Emirates ID Front Image URL
-          writeOnly: true
-        emirates_id_back_image_url:
-          maxLength: 2000
-          minLength: 1
-          type: string
-          description: Emirates ID Back Image URL
-          writeOnly: true
-      description: Identification details of the customer
-    KycInformation:
-      required:
-        - account_type
-        - address
-        - customer_classification
-        - industry_sub_segment
-        - onboarding_date
-        - po_box
-        - purpose_of_account
-        - source_of_funds
-        - state
-      type: object
-      properties:
-        monthly_income:
-          maxLength: 40
-          type: number
-          description: Monthly Income / Declared Salary
-        source_of_funds:
-          maxLength: 100
-          type: string
-          description: Source of Funds
-          example: WAGES
-          enum:
-            - WAGES
-        gross_monthly_income:
-          maxLength: 40
-          type: number
-          description: Gross Monthly Income
-        customer_classification:
-          maxLength: 100
-          type: string
-          description: Customer Classification
-          example: DIRECT_CARD_HOLDER
-          enum:
-            - DIRECT_CARD_HOLDER
-            - EXCHANGE_HOUSE_CARD_HOLDER
-        purpose_of_account:
-          maxLength: 100
-          type: string
-          description: Purpose of account
-          example: SALARY
-          enum:
-            - SALARY
-            - WAGES
-        onboarding_date:
-          maxLength: 50
-          type: string
-          description: Onboarding Date
-          format: date-time
-          example: '2025-03-18T08:32:44.845Z'
-        account_type:
-          maxLength: 50
-          type: string
-          description: Account type/Product
-          example: C3_WAGE_CARDS
-        industry_sub_segment:
-          maxLength: 200
-          type: string
-          description: Industry Sub-Segment
-          example: SALARIED
-          enum:
-            - SALARIED
-        state:
-          maxLength: 250
-          type: string
-          description: State
-          example: string
-        po_box:
-          maxLength: 250
-          type: string
-          description: PO Box
-          example: string
-        address:
-          maxLength: 100
-          pattern: ^[a-zA-Z0-9 ]+$
-          type: string
-          description: This field holds the address and it allows only alphanumeric and space characters
-          example: string
-      description: KYC information of the customer
-    PersonalDetails:
-      required:
-        - customer_category
-        - date_of_birth
-        - first_name
-        - gender
-        - last_name
-        - national_code
-        - nationality
-        - risk_profile
-        - title
-      type: object
-      properties:
-        title:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: Title
-          example: MR
-          enum:
-            - MR
-            - MISS
-            - MRS
-        customer_category:
-          maxLength: 100
-          minLength: 1
-          type: string
-          description: Customer Category
-          example: C3_WAGE_CARD_HOLDERS
-        first_name:
-          maxLength: 80
-          minLength: 1
-          type: string
-          description: First Name
-          example: John
-        middle_name:
-          maxLength: 80
-          type: string
-          description: Middle Name
-          example: A.
-        last_name:
-          maxLength: 80
-          minLength: 1
-          type: string
-          description: Last Name
-          example: Doe
-        gender:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: Gender
-          example: M
-          enum:
-            - M
-            - F
-        nationality:
-          maxLength: 50
-          type: string
-          description: Nationality
-          example: United Arab Emirates
-        date_of_birth:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: Date of Birth
-          example: '1990-01-22'
-        risk_profile:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: Risk Profile
-          example: LOW
-          enum:
-            - LOW
-        national_code:
-          maxLength: 2
-          minLength: 1
-          type: string
-          description: National Code
-          example: AE
-        place_of_birth:
-          maxLength: 200
-          type: string
-          description: Place Of Birth, this field is mandatory for Pakistani national
-          example: string
-      description: Personal details of the customer
-    APIErrorResponse:
-      required:
-        - errors
-        - timestamp
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Timestamp of the error response
-          format: date-time
-          example: '2025-03-18T08:32:44.845Z'
-        errors:
-          type: array
-          description: List of error details
-          items:
-            $ref: '#/components/schemas/ErrorDetails'
-      description: Response containing error details
-    ErrorDetails:
-      required:
-        - error_code
-        - error_message
-      type: object
-      properties:
-        error_code:
-          type: string
-          description: Error code identifying the type of error
-          example: ERR001
-        error_message:
-          type: string
-          description: Detailed error message
-          example: Invalid input provided
-      description: Details of an error response
-    Customer:
-      required:
-        - contact_details
-        - employment_details
-        - identification_details
-        - kyc_information
-        - personal_details
-      type: object
-      properties:
-        personal_details:
-          $ref: '#/components/schemas/PersonalDetails'
-        identification_details:
-          $ref: '#/components/schemas/IdentificationDetails'
-        employment_details:
-          $ref: '#/components/schemas/EmploymentDetails'
-        contact_details:
-          $ref: '#/components/schemas/ContactDetails'
-        kyc_information:
-          $ref: '#/components/schemas/KycInformation'
-        is_active:
-          type: boolean
-          description: Indicates if the customer profile is active
-          example: false
-        profile_status:
-          type: string
-          description: Status of the customer profile
-          example: PENDING
-          enum:
-            - APPROVED
-            - REJECTED
-            - PENDING
-            - DELETED
-        description:
-          type: string
-          description: Additional information about the profile
-          example: Profile creation is under review
-      description: Customer object containing additional details
-    CustomerProfileResponse:
-      required:
-        - customer
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/Customer'
-      description: Response containing customer profile details
-    ContactDetailsUpdate:
-      type: object
-      properties:
-        mobile:
-          maxLength: 100
-          minLength: 9
-          type: string
-          description: Mobile
-      description: Contact details of the customer
-    CustomerDetailsUpdate:
-      type: object
-      properties:
-        identification_details:
-          $ref: '#/components/schemas/IdentificationDetailsUpdate'
-        employment_details:
-          $ref: '#/components/schemas/EmploymentDetailsUpdate'
-        contact_details:
-          $ref: '#/components/schemas/ContactDetailsUpdate'
-        kyc_information:
-          $ref: '#/components/schemas/KycInformationUpdate'
-        is_active:
-          type: boolean
-          description: Indicates if the customer profile is active
-          example: false
-        description:
-          type: string
-          description: Additional information holds in case of activation and deactivation
-          example: Activate the customer profile
-      description: Customer details for profile update
-    CustomerProfileUpdateRequest:
-      required:
-        - customer
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerDetailsUpdate'
-    EmploymentDetailsUpdate:
-      type: object
-      properties:
-        employer_or_business_name:
-          maxLength: 255
-          type: string
-          description: Employer/Business Name
-        sponsor_name:
-          maxLength: 100
-          type: string
-          description: Sponsor Name
-        occupation:
-          maxLength: 50
-          type: string
-          description: Occupation
-      description: Employment details of the customer
-    IdentificationDetailsUpdate:
-      type: object
-      properties:
-        passport_number:
-          maxLength: 100
-          type: string
-          description: Passport Number
-        passport_issue_date:
-          maxLength: 50
-          type: string
-          description: Passport Issue Date (yyyy-mm-dd)
-          format: date
-          example: '2025-04-22'
-        passport_expiry_date:
-          maxLength: 50
-          type: string
-          description: Passport Expiry Date
-          format: date
-          example: '2025-04-22'
-        emirates_id_expiry_date:
-          type: string
-          description: Emirates ID Expiry Date
-          format: date
-          example: '2025-04-25'
-        emirates_id_ping_status:
-          maxLength: 100
-          type: string
-          description: EmiratesID Ping Status
-        emirates_id_ping_date:
-          maxLength: 50
-          type: string
-          description: EmiratesID Ping Date
-          format: date-time
-          example: '2025-03-18T08:32:44.845Z'
-        emirates_id_front_image_url:
-          maxLength: 2000
-          type: string
-          description: 'Emirates ID Front Image URL: Both front and back image URLs must be available'
-          writeOnly: true
-        emirates_id_back_image_url:
-          maxLength: 2000
-          type: string
-          description: 'Emirates ID Back Image URL: Both front and back image URLs must be available'
-          writeOnly: true
-      description: Identification details of the customer
-    KycInformationUpdate:
-      type: object
-      properties:
-        address:
-          maxLength: 100
-          pattern: ^[a-zA-Z0-9 ]+$
-          type: string
-          description: This field holds the address and it allows only alphanumeric and space characters
-          example: string
-      description: KYC information of the customer
-    CustomerProfileUpdateResponse:
-      required:
-        - customer
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerUpdate'
-      description: Response containing customer update profile details
-    CustomerUpdate:
-      required:
-        - kyc_information
-      type: object
-      properties:
-        identification_details:
-          $ref: '#/components/schemas/IdentificationDetailsUpdate'
-        employment_details:
-          $ref: '#/components/schemas/EmploymentDetailsUpdate'
-        contact_details:
-          $ref: '#/components/schemas/ContactDetailsUpdate'
-        kyc_information:
-          $ref: '#/components/schemas/KycInformationUpdate'
-        is_active:
-          type: boolean
-          description: Indicates if the customer profile is active
-          example: false
-        description:
-          type: string
-          description: Additional information holds in case of activation and deactivation
-          example: Activate the customer profile
-      description: Customer object containing additional details
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Partner Customer Profile Onboarding APIs",
+        "description": "API for managing customer partner profile onboarding",
+        "version": "1.7"
+    },
+    "servers": [
+        {
+            "url": "https://api.rakbankt.ae/customer-onboarding",
+            "description": "TEST URL"
+        }
+    ],
+    "paths": {
+        "/api/v1/customer-profiles": {
+            "post": {
+                "tags": [
+                    "customer-profile"
+                ],
+                "summary": "Create a new Customer Profile",
+                "description": "Create a Customer Profile",
+                "operationId": "createCustomerProfile",
+                "parameters": [
+                    {
+                        "name": "msgId",
+                        "in": "header",
+                        "description": "Unique ID for each request",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "Unique ID for each request",
+                            "example": 1234567890
+                        },
+                        "example": 1234567890
+                    },
+                    {
+                        "name": "X-Idempotency-Key",
+                        "in": "header",
+                        "description": "Unique ID for request",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "Unique ID for request",
+                            "example": 1234567890
+                        },
+                        "example": 1234567890
+                    },
+                    {
+                        "name": "X-IBM-Client-Id",
+                        "in": "header",
+                        "description": "X-IBM-Client-Id represents partner name or code",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "X-IBM-Client-Id represents partner name or code",
+                            "example": "partner-code"
+                        },
+                        "example": "partner-code"
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Accept header for content negotiation",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "application/json"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerProfileCreateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customer-profiles/{emiratesId}": {
+            "get": {
+                "tags": [
+                    "customer-profile"
+                ],
+                "summary": "Retrieve a specific Customer Profile",
+                "description": "Retrieve a Customer Profile",
+                "operationId": "getCustomerProfile",
+                "parameters": [
+                    {
+                        "name": "msgId",
+                        "in": "header",
+                        "description": "Unique ID for each request",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "Unique ID for each request",
+                            "example": 1234567890
+                        },
+                        "example": 1234567890
+                    },
+                    {
+                        "name": "X-IBM-Client-Id",
+                        "in": "header",
+                        "description": "X-IBM-Client-Id represents partner name or code",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "X-IBM-Client-Id represents partner name or code",
+                            "example": "partner-code"
+                        },
+                        "example": "partner-code"
+                    },
+                    {
+                        "name": "emiratesId",
+                        "in": "path",
+                        "description": "Emirates ID Card Number",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "minLength": 15,
+                            "pattern": "^784[0-9]{12}$",
+                            "type": "string",
+                            "description": "Emirates ID Card Number"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Accept header for content negotiation",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "application/json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerProfileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "customer-profile"
+                ],
+                "summary": "Delete a specific Customer Profile",
+                "description": "Delete a Customer Profile",
+                "operationId": "deleteCustomerProfile",
+                "parameters": [
+                    {
+                        "name": "msgId",
+                        "in": "header",
+                        "description": "Unique ID for each request",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "Unique ID for each request",
+                            "example": 1234567890
+                        },
+                        "example": 1234567890
+                    },
+                    {
+                        "name": "X-IBM-Client-Id",
+                        "in": "header",
+                        "description": "X-IBM-Client-Id represents partner name or code",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "X-IBM-Client-Id represents partner name or code",
+                            "example": "partner-code"
+                        },
+                        "example": "partner-code"
+                    },
+                    {
+                        "name": "emiratesId",
+                        "in": "path",
+                        "description": "Emirates ID Card Number",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "minLength": 15,
+                            "pattern": "^784[0-9]{12}$",
+                            "type": "string",
+                            "description": "Emirates ID Card Number"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Accept header for content negotiation",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "application/json"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "customer-profile"
+                ],
+                "summary": "Update specific attributes within a Customer Profile",
+                "description": "Update a Customer Profile",
+                "operationId": "updateCustomerProfile",
+                "parameters": [
+                    {
+                        "name": "msgId",
+                        "in": "header",
+                        "description": "Unique ID for each request",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "Unique ID for each request",
+                            "example": 1234567890
+                        },
+                        "example": 1234567890
+                    },
+                    {
+                        "name": "X-IBM-Client-Id",
+                        "in": "header",
+                        "description": "X-IBM-Client-Id represents partner name or code",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "type": "string",
+                            "description": "X-IBM-Client-Id represents partner name or code",
+                            "example": "partner-code"
+                        },
+                        "example": "partner-code"
+                    },
+                    {
+                        "name": "emiratesId",
+                        "in": "path",
+                        "description": "Emirates ID Card Number",
+                        "required": true,
+                        "schema": {
+                            "maxLength": 100,
+                            "minLength": 15,
+                            "pattern": "^784[0-9]{12}$",
+                            "type": "string",
+                            "description": "Emirates ID Card Number"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "description": "Accept header for content negotiation",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "application/json"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CustomerProfileUpdateRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CustomerProfileUpdateResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "headers": {
+                            "msgId": {
+                                "description": "Request unique id in response header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/APIErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ContactDetails": {
+                "required": [
+                    "mobile"
+                ],
+                "type": "object",
+                "properties": {
+                    "mobile": {
+                        "maxLength": 100,
+                        "minLength": 9,
+                        "type": "string",
+                        "description": "Mobile"
+                    },
+                    "email_id": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Email ID"
+                    }
+                },
+                "description": "Contact details of the customer"
+            },
+            "CustomerDetails": {
+                "required": [
+                    "contact_details",
+                    "employment_details",
+                    "identification_details",
+                    "kyc_information",
+                    "personal_details"
+                ],
+                "type": "object",
+                "properties": {
+                    "personal_details": {
+                        "$ref": "#/components/schemas/PersonalDetails"
+                    },
+                    "identification_details": {
+                        "$ref": "#/components/schemas/IdentificationDetails"
+                    },
+                    "employment_details": {
+                        "$ref": "#/components/schemas/EmploymentDetails"
+                    },
+                    "contact_details": {
+                        "$ref": "#/components/schemas/ContactDetails"
+                    },
+                    "kyc_information": {
+                        "$ref": "#/components/schemas/KycInformation"
+                    }
+                },
+                "description": "Customer details for profile creation"
+            },
+            "CustomerProfileCreateRequest": {
+                "required": [
+                    "customer"
+                ],
+                "type": "object",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerDetails"
+                    }
+                }
+            },
+            "EmploymentDetails": {
+                "type": "object",
+                "properties": {
+                    "employer_or_business_name": {
+                        "maxLength": 255,
+                        "type": "string",
+                        "description": "Employer/Business Name: This field is conditionally mandatory. Either Employer/Business Name or Sponsor Name must be provided"
+                    },
+                    "sponsor_name": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Sponsor Name: This field is conditionally mandatory. Either Employer/Business Name or Sponsor Name must be provided"
+                    },
+                    "occupation": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Occupation"
+                    }
+                },
+                "description": "Employment details of the customer"
+            },
+            "IdentificationDetails": {
+                "required": [
+                    "emirates_id",
+                    "emirates_id_back_image_url",
+                    "emirates_id_expiry_date",
+                    "emirates_id_front_image_url",
+                    "resident_country"
+                ],
+                "type": "object",
+                "properties": {
+                    "passport_number": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Passport Number"
+                    },
+                    "passport_issue_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Passport Issue Date (yyyy-mm-dd)",
+                        "format": "date",
+                        "example": "2025-04-22"
+                    },
+                    "passport_expiry_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Passport Expiry Date",
+                        "format": "date",
+                        "example": "2025-04-22"
+                    },
+                    "emirates_id": {
+                        "maxLength": 100,
+                        "minLength": 15,
+                        "pattern": "^784[0-9]{12}$",
+                        "type": "string",
+                        "description": "Emirates ID Card Number"
+                    },
+                    "emirates_id_expiry_date": {
+                        "type": "string",
+                        "description": "Emirates ID Expiry Date",
+                        "format": "date",
+                        "example": "2025-04-25"
+                    },
+                    "emirates_id_ping_status": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "EmiratesID Ping Status"
+                    },
+                    "emirates_id_ping_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "EmiratesID Ping Date",
+                        "format": "date-time",
+                        "example": "2025-03-18T08:32:44.845Z"
+                    },
+                    "resident_country": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Resident Country",
+                        "example": "UAE",
+                        "enum": [
+                            "UAE"
+                        ]
+                    },
+                    "emirates_id_front_image_url": {
+                        "maxLength": 2000,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Emirates ID Front Image URL",
+                        "writeOnly": true
+                    },
+                    "emirates_id_back_image_url": {
+                        "maxLength": 2000,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Emirates ID Back Image URL",
+                        "writeOnly": true
+                    }
+                },
+                "description": "Identification details of the customer"
+            },
+            "KycInformation": {
+                "required": [
+                    "account_type",
+                    "address",
+                    "customer_classification",
+                    "industry_sub_segment",
+                    "onboarding_date",
+                    "po_box",
+                    "purpose_of_account",
+                    "source_of_funds",
+                    "state"
+                ],
+                "type": "object",
+                "properties": {
+                    "monthly_income": {
+                        "maxLength": 40,
+                        "type": "number",
+                        "description": "Monthly Income / Declared Salary"
+                    },
+                    "source_of_funds": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Source of Funds",
+                        "example": "WAGES",
+                        "enum": [
+                            "WAGES"
+                        ]
+                    },
+                    "gross_monthly_income": {
+                        "maxLength": 40,
+                        "type": "number",
+                        "description": "Gross Monthly Income"
+                    },
+                    "customer_classification": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Customer Classification",
+                        "example": "DIRECT_CARD_HOLDER",
+                        "enum": [
+                            "DIRECT_CARD_HOLDER",
+                            "EXCHANGE_HOUSE_CARD_HOLDER"
+                        ]
+                    },
+                    "purpose_of_account": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Purpose of account",
+                        "example": "SALARY",
+                        "enum": [
+                            "SALARY",
+                            "WAGES"
+                        ]
+                    },
+                    "onboarding_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Onboarding Date",
+                        "format": "date-time",
+                        "example": "2025-03-18T08:32:44.845Z"
+                    },
+                    "account_type": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Account type/Product",
+                        "example": "C3_WAGE_CARDS"
+                    },
+                    "industry_sub_segment": {
+                        "maxLength": 200,
+                        "type": "string",
+                        "description": "Industry Sub-Segment",
+                        "example": "SALARIED",
+                        "enum": [
+                            "SALARIED"
+                        ]
+                    },
+                    "state": {
+                        "maxLength": 250,
+                        "type": "string",
+                        "description": "State",
+                        "example": "string"
+                    },
+                    "po_box": {
+                        "maxLength": 250,
+                        "type": "string",
+                        "description": "PO Box",
+                        "example": "string"
+                    },
+                    "address": {
+                        "maxLength": 100,
+                        "pattern": "^[a-zA-Z0-9 ]+$",
+                        "type": "string",
+                        "description": "This field holds the address and it allows only alphanumeric and space characters",
+                        "example": "string"
+                    }
+                },
+                "description": "KYC information of the customer"
+            },
+            "PersonalDetails": {
+                "required": [
+                    "customer_category",
+                    "date_of_birth",
+                    "first_name",
+                    "gender",
+                    "last_name",
+                    "national_code",
+                    "nationality",
+                    "risk_profile",
+                    "title"
+                ],
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Title",
+                        "example": "MR",
+                        "enum": [
+                            "MR",
+                            "MISS",
+                            "MRS"
+                        ]
+                    },
+                    "customer_category": {
+                        "maxLength": 100,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Customer Category",
+                        "example": "C3_WAGE_CARD_HOLDERS"
+                    },
+                    "first_name": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "First Name",
+                        "example": "John"
+                    },
+                    "middle_name": {
+                        "maxLength": 80,
+                        "type": "string",
+                        "description": "Middle Name",
+                        "example": "A."
+                    },
+                    "last_name": {
+                        "maxLength": 80,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Last Name",
+                        "example": "Doe"
+                    },
+                    "gender": {
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Gender",
+                        "example": "M",
+                        "enum": [
+                            "M",
+                            "F"
+                        ]
+                    },
+                    "nationality": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Nationality",
+                        "example": "United Arab Emirates"
+                    },
+                    "date_of_birth": {
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Date of Birth",
+                        "example": "1990-01-22"
+                    },
+                    "risk_profile": {
+                        "maxLength": 50,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "Risk Profile",
+                        "example": "LOW",
+                        "enum": [
+                            "LOW"
+                        ]
+                    },
+                    "national_code": {
+                        "maxLength": 2,
+                        "minLength": 1,
+                        "type": "string",
+                        "description": "National Code",
+                        "example": "AE"
+                    },
+                    "place_of_birth": {
+                        "maxLength": 200,
+                        "type": "string",
+                        "description": "Place Of Birth, this field is mandatory for Pakistani national",
+                        "example": "string"
+                    }
+                },
+                "description": "Personal details of the customer"
+            },
+            "APIErrorResponse": {
+                "required": [
+                    "errors",
+                    "timestamp"
+                ],
+                "type": "object",
+                "properties": {
+                    "timestamp": {
+                        "type": "string",
+                        "description": "Timestamp of the error response",
+                        "format": "date-time",
+                        "example": "2025-03-18T08:32:44.845Z"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "description": "List of error details",
+                        "items": {
+                            "$ref": "#/components/schemas/ErrorDetails"
+                        }
+                    }
+                },
+                "description": "Response containing error details"
+            },
+            "ErrorDetails": {
+                "required": [
+                    "error_code",
+                    "error_message"
+                ],
+                "type": "object",
+                "properties": {
+                    "error_code": {
+                        "type": "string",
+                        "description": "Error code identifying the type of error",
+                        "example": "ERR001"
+                    },
+                    "error_message": {
+                        "type": "string",
+                        "description": "Detailed error message",
+                        "example": "Invalid input provided"
+                    }
+                },
+                "description": "Details of an error response"
+            },
+            "Customer": {
+                "required": [
+                    "contact_details",
+                    "employment_details",
+                    "identification_details",
+                    "kyc_information",
+                    "personal_details"
+                ],
+                "type": "object",
+                "properties": {
+                    "personal_details": {
+                        "$ref": "#/components/schemas/PersonalDetails"
+                    },
+                    "identification_details": {
+                        "$ref": "#/components/schemas/IdentificationDetails"
+                    },
+                    "employment_details": {
+                        "$ref": "#/components/schemas/EmploymentDetails"
+                    },
+                    "contact_details": {
+                        "$ref": "#/components/schemas/ContactDetails"
+                    },
+                    "kyc_information": {
+                        "$ref": "#/components/schemas/KycInformation"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "Indicates if the customer profile is active",
+                        "example": false
+                    },
+                    "profile_status": {
+                        "type": "string",
+                        "description": "Status of the customer profile",
+                        "example": "PENDING",
+                        "enum": [
+                            "APPROVED",
+                            "REJECTED",
+                            "PENDING",
+                            "DELETED"
+                        ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Additional information about the profile",
+                        "example": "Profile creation is under review"
+                    }
+                },
+                "description": "Customer object containing additional details"
+            },
+            "CustomerProfileResponse": {
+                "required": [
+                    "customer"
+                ],
+                "type": "object",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/Customer"
+                    }
+                },
+                "description": "Response containing customer profile details"
+            },
+            "ContactDetailsUpdate": {
+                "type": "object",
+                "properties": {
+                    "mobile": {
+                        "maxLength": 100,
+                        "minLength": 9,
+                        "type": "string",
+                        "description": "Mobile"
+                    }
+                },
+                "description": "Contact details of the customer"
+            },
+            "CustomerDetailsUpdate": {
+                "type": "object",
+                "properties": {
+                    "identification_details": {
+                        "$ref": "#/components/schemas/IdentificationDetailsUpdate"
+                    },
+                    "employment_details": {
+                        "$ref": "#/components/schemas/EmploymentDetailsUpdate"
+                    },
+                    "contact_details": {
+                        "$ref": "#/components/schemas/ContactDetailsUpdate"
+                    },
+                    "kyc_information": {
+                        "$ref": "#/components/schemas/KycInformationUpdate"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "Indicates if the customer profile is active",
+                        "example": false
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Additional information holds in case of activation and deactivation",
+                        "example": "Activate the customer profile"
+                    }
+                },
+                "description": "Customer details for profile update"
+            },
+            "CustomerProfileUpdateRequest": {
+                "required": [
+                    "customer"
+                ],
+                "type": "object",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerDetailsUpdate"
+                    }
+                }
+            },
+            "EmploymentDetailsUpdate": {
+                "type": "object",
+                "properties": {
+                    "employer_or_business_name": {
+                        "maxLength": 255,
+                        "type": "string",
+                        "description": "Employer/Business Name"
+                    },
+                    "sponsor_name": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Sponsor Name"
+                    },
+                    "occupation": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Occupation"
+                    }
+                },
+                "description": "Employment details of the customer"
+            },
+            "IdentificationDetailsUpdate": {
+                "type": "object",
+                "properties": {
+                    "passport_number": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "Passport Number"
+                    },
+                    "passport_issue_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Passport Issue Date (yyyy-mm-dd)",
+                        "format": "date",
+                        "example": "2025-04-22"
+                    },
+                    "passport_expiry_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "Passport Expiry Date",
+                        "format": "date",
+                        "example": "2025-04-22"
+                    },
+                    "emirates_id_expiry_date": {
+                        "type": "string",
+                        "description": "Emirates ID Expiry Date",
+                        "format": "date",
+                        "example": "2025-04-25"
+                    },
+                    "emirates_id_ping_status": {
+                        "maxLength": 100,
+                        "type": "string",
+                        "description": "EmiratesID Ping Status"
+                    },
+                    "emirates_id_ping_date": {
+                        "maxLength": 50,
+                        "type": "string",
+                        "description": "EmiratesID Ping Date",
+                        "format": "date-time",
+                        "example": "2025-03-18T08:32:44.845Z"
+                    },
+                    "emirates_id_front_image_url": {
+                        "maxLength": 2000,
+                        "type": "string",
+                        "description": "Emirates ID Front Image URL: Both front and back image URLs must be available",
+                        "writeOnly": true
+                    },
+                    "emirates_id_back_image_url": {
+                        "maxLength": 2000,
+                        "type": "string",
+                        "description": "Emirates ID Back Image URL: Both front and back image URLs must be available",
+                        "writeOnly": true
+                    }
+                },
+                "description": "Identification details of the customer"
+            },
+            "KycInformationUpdate": {
+                "type": "object",
+                "properties": {
+                    "address": {
+                        "maxLength": 100,
+                        "pattern": "^[a-zA-Z0-9 ]+$",
+                        "type": "string",
+                        "description": "This field holds the address and it allows only alphanumeric and space characters",
+                        "example": "string"
+                    }
+                },
+                "description": "KYC information of the customer"
+            },
+            "CustomerProfileUpdateResponse": {
+                "required": [
+                    "customer"
+                ],
+                "type": "object",
+                "properties": {
+                    "customer": {
+                        "$ref": "#/components/schemas/CustomerUpdate"
+                    }
+                },
+                "description": "Response containing customer update profile details"
+            },
+            "CustomerUpdate": {
+                "required": [
+                    "kyc_information"
+                ],
+                "type": "object",
+                "properties": {
+                    "identification_details": {
+                        "$ref": "#/components/schemas/IdentificationDetailsUpdate"
+                    },
+                    "employment_details": {
+                        "$ref": "#/components/schemas/EmploymentDetailsUpdate"
+                    },
+                    "contact_details": {
+                        "$ref": "#/components/schemas/ContactDetailsUpdate"
+                    },
+                    "kyc_information": {
+                        "$ref": "#/components/schemas/KycInformationUpdate"
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "description": "Indicates if the customer profile is active",
+                        "example": false
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Additional information holds in case of activation and deactivation",
+                        "example": "Activate the customer profile"
+                    }
+                },
+                "description": "Customer object containing additional details"
+            }
+        }
+    }
+}
