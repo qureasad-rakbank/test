@@ -1,0 +1,182 @@
+openapi: 3.0.1
+info:
+  title: Webhook API - Notify Customer Profile Status
+  description: Webhook API - notify customer profile status
+  version: '1.4'
+  contact:
+    name: API Developers
+    email: apideveloper@rakbank.ae
+servers:
+  - url: https://api.rakbank.ae/rb/api/customer-onboarding
+paths:
+  /v1/notify/customer-profile-status:
+    post:
+      tags:
+        - Webhook API - Notify-customer-profile-status
+      summary: Webhook API - Notify Customer Profile Status
+      description: Webhook - Notify customer profile status
+      operationId: updateCustomerProfileStatus
+      parameters:
+        - name: msgId
+          in: header
+          description: Unique ID for each request
+          required: true
+          schema:
+            maxLength: 100
+            type: string
+            description: Unique ID for each request
+            example: 1234567890
+          example: 1234567890
+        - name: X-IBM-Client-Id
+          in: header
+          description: X-IBM-Client-Id represents partner name or code
+          required: true
+          schema:
+            maxLength: 100
+            type: string
+            description: X-IBM-Client-Id represents partner name or code
+            example: partner-code
+          example: partner-code
+        - name: Accept
+          in: header
+          description: Accept header for content negotiation
+          required: true
+          schema:
+            type: string
+          example: application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookRequest'
+        required: true
+      responses:
+        '202':
+          description: Accepted
+          headers:
+            msgId:
+              description: Request unique id in response header
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          headers:
+            msgId:
+              description: Request unique id in response header
+              schema:
+                type: string
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/APIErrorResponse'
+        '500':
+          description: Internal Server Error
+          headers:
+            msgId:
+              description: Request unique id in response header
+              schema:
+                type: string
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/APIErrorResponse'
+components:
+  schemas:
+    CustomerStatusDetails:
+      required:
+        - description
+        - emirates_id
+        - is_active
+        - profile_status
+        - event_type
+      type: object
+      properties:
+        correlation_id:
+          maxLength: 100
+          type: string
+          description: 'Correlation ID: This field holds the C3 request ID'
+          example: MSG12345
+        emirates_id:
+          maxLength: 100
+          minLength: 15
+          type: string
+          description: Emirates ID of the customer
+          example: '784198712345671'
+        is_active:
+          type: boolean
+          description: Indicates if the customer profile is active
+          example: true
+        profile_status:
+          type: string
+          description: Status of the customer profile
+          example: APPROVED
+          enum:
+            - APPROVED
+            - REJECTED
+            - PENDING
+            - DELETED
+        description:
+          maxLength: 500
+          minLength: 1
+          type: string
+          description: Description or remarks about the profile status
+          example: Profile created successfully
+        event_type:
+          type: string
+          description: This field holds the webhook event type
+          example: PROFILE.CREATED
+          maxLength: 500
+          minLength: 1
+          enum:
+            - PROFILE.CREATED
+            - PROFILE.DEACTIVATED
+            - PROFILE.ACTIVATED
+            - PROFILE.UPDATED
+            - PROFILE.DELETED
+      description: Customer details for status update
+    WebhookRequest:
+      required:
+        - customer
+        - timestamp
+      type: object
+      properties:
+        timestamp:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: Timestamp of the request
+          format: date-time
+        customer:
+          $ref: '#/components/schemas/CustomerStatusDetails'
+    APIErrorResponse:
+      required:
+        - errors
+        - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Timestamp of the error response
+          format: date-time
+          example: '2025-03-18T08:32:44.845Z'
+        errors:
+          type: array
+          description: List of error details
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+      description: Response containing error details
+    ErrorDetails:
+      required:
+        - error_code
+        - error_message
+      type: object
+      properties:
+        error_code:
+          type: string
+          description: Error code identifying the type of error
+          example: ERR001
+        error_message:
+          type: string
+          description: Detailed error message
+          example: Invalid input provided
+      description: Details of an error response
